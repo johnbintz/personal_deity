@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require 'personal_diety'
+
+module PersonalDiety
+  class Cli < Thor
+    include Thor::Actions
+
+    def self.source_root ; PersonalDiety.skel.bin ; end
+
+    desc "install", "Install personal_diety hooks into Capistrano deployment"
+    def install
+      self.destination_root = 'config'
+      append_file "deploy.rb", <<-RB
+        require 'personal_diety/capistrano'
+      RB
+
+      copy_file 'god.conf', 'god.conf'
+    end
+
+    default_task :install
+  end
+end
+
+PersonalDiety::Cli.start

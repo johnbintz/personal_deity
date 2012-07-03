@@ -1,0 +1,8 @@
+#!/bin/bash
+
+base_command="bundle exec god -p <%= god_port %>"
+if [ -z $1 ]; then
+  $base_command --log-level <%= god_log_level %> -l <%= personal_diety_target %>/god.log -c <%= config_path %> -P <%= personal_diety_target %>/god.pid
+else
+  $base_command $@
+fi
