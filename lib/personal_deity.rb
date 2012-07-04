@@ -1,4 +1,4 @@
-require "personal_diety/version"
+require "personal_deity/version"
 
 module PersonalDeity
   class Skel
