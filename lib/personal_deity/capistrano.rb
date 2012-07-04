@@ -48,10 +48,10 @@ Capistrano::Configuration.instance(true).load do
 
         config_path = "#{personal_deity_target}/god.conf"
 
-        Personaldeity.skel.capistrano.find do |file|
+        PersonalDeity.skel.capistrano.find do |file|
           if file.file?
             template = ERB.new(file.read).result(binding)
-            upload_target = personal_deity_target.join(file.relative_path_from(Personaldeity.skel.capistrano))
+            upload_target = personal_deity_target.join(file.relative_path_from(PersonalDeity.skel.capistrano))
             top.upload StringIO.new(template), upload_target.to_s
             run "chmod #{file.stat.mode.to_s(8)[-3..-1]} #{upload_target}"
           end
