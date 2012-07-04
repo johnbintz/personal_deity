@@ -9,12 +9,10 @@ module PersonalDeity
 
     def self.source_root ; PersonalDeity.skel.bin ; end
 
-    desc "install", "Install personal_diety hooks into Capistrano deployment"
+    desc "install", "Install personal_deity hooks into Capistrano deployment"
     def install
       self.destination_root = 'config'
-      append_file "deploy.rb", <<-RB
-        require 'personal_diety/capistrano'
-      RB
+      append_file "deploy.rb", "require 'personal_deity/capistrano'"
 
       copy_file 'god.conf', 'god.conf'
     end
