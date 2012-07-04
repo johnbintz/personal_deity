@@ -1,6 +1,6 @@
 require "personal_diety/version"
 
-module PersonalDiety
+module PersonalDeity
   class Skel
     def self.root
       Pathname(File.expand_path('../../skel', __FILE__))
