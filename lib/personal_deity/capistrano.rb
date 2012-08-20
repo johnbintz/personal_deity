@@ -31,6 +31,8 @@ Capistrano::Configuration.instance(true).load do
     run generate_personal_deity_command(*args) + "; true"
   end
 
+  actions = [ :stop, :start, :restart ]
+
   namespace :personal_deity do
     desc "Install the God config for this app"
     task :install do
@@ -82,28 +84,18 @@ Capistrano::Configuration.instance(true).load do
       end
     end
 
-    desc "Stop the God process for this application"
-    task :stop do
-      run_personal_deity_command :stop, application
-    end
-
-    desc "Start the God process for this application"
-    task :start do
-      run_personal_deity_command :start, application
-    end
-
-    desc "Restart the God process for this application"
-    task :restart do
-      run_personal_deity_command :stop, application
-      sleep 3
-      run_personal_deity_command :start, application
+    actions.each do |method|
+      desc "#{method.to_s.capitalize} the God process for this application"
+      task(method) do
+        run_personal_deity_command method, application
+      end
     end
   end
 
   namespace :deploy do
-    task(:stop) { top.personal_deity.stop }
-    task(:start) { top.personal_deity.start }
-    task(:restart) { top.personal_deity.restart }
+    actions.each do |method|
+      task(action) { top.personal_deity.send(method) }
+    end
   end
 end
 
