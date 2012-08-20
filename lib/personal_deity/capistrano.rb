@@ -34,11 +34,15 @@ Capistrano::Configuration.instance(true).load do
   namespace :personal_deity do
     desc "Install the God config for this app"
     task :install do
-      template = ERB.new(File.read(personal_deity_local_app_config)).result(binding)
       upload_target = personal_deity_config_dir.join("#{application}.god")
+
+      run_personal_deity_command :stop, upload_target.to_s
+
+      template = ERB.new(File.read(personal_deity_local_app_config)).result(binding)
       top.upload StringIO.new(template), upload_target.to_s
 
       run_personal_deity_command :load, upload_target.to_s
+      run_personal_deity_command :start, upload_target.to_s
     end
 
     namespace :service do
@@ -90,12 +94,11 @@ Capistrano::Configuration.instance(true).load do
 
     desc "Restart the God process for this application"
     task :restart do
-      run_personal_deity_command :restart, application
+      run_personal_deity_command :stop, application
+      sleep 3
+      run_personal_deity_command :start, application
     end
   end
-
-  before 'deploy:update_symlink', 'personal_deity:install'
-  before 'deploy:symlink', 'personal_deity:install'
 
   namespace :deploy do
     task(:stop) { top.personal_deity.stop }
