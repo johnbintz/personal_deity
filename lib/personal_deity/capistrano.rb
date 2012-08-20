@@ -94,7 +94,7 @@ Capistrano::Configuration.instance(true).load do
 
   namespace :deploy do
     actions.each do |method|
-      task(action) { top.personal_deity.send(method) }
+      task(method) { top.personal_deity.send(method) }
     end
   end
 end
